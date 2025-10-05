@@ -4,10 +4,10 @@ import path from "node:path";
 import fs from "node:fs";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yaml";
-import { initDb } from '../db/index.ts';
-import authRoutes from './routes/auth.ts';
-import notesRoutes from './routes/notes.ts';
-import { errorHandler } from './middleware/errorHandler.ts';
+import { initDb } from '../db/index.js';
+import authRoutes from './routes/auth.js';
+import notesRoutes from './routes/notes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +17,14 @@ initDb();
 
 // JSON body parsing middleware
 app.use(express.json());
+
+// Load OpenAPI from openapi.yaml
+const openapiPath = path.join(process.cwd(), "openapi.yaml");
+const openapiDoc = YAML.parse(fs.readFileSync(openapiPath, "utf-8"));
+
+// Serve Swagger UI and raw JSON
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+app.get("/openapi.json", (_req, res) => res.json(openapiDoc));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
