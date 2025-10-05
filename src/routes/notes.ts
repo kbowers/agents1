@@ -1,5 +1,5 @@
-import { Router, Response } from 'express';
-import { z } from 'zod';
+import { Router, Response, NextFunction } from 'express';
+import { createNoteSchema } from '../schemas.js';
 import { query, run, get } from '../../db/index.js';
 import { authMiddleware, AuthenticatedRequest } from '../middleware/auth.js';
 
@@ -8,13 +8,8 @@ const router = Router();
 // Apply auth middleware to all routes
 router.use(authMiddleware);
 
-// Validation schemas
-const createNoteSchema = z.object({
-  content: z.string().min(1).max(1000)
-});
-
 // GET /notes - List user's notes
-router.get('/', (req: AuthenticatedRequest, res: Response) => {
+router.get('/', (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const notes = query(
       'SELECT id, content, created_at FROM notes WHERE user_id = ? ORDER BY created_at DESC',
@@ -23,13 +18,12 @@ router.get('/', (req: AuthenticatedRequest, res: Response) => {
     
     res.json({ notes });
   } catch (error) {
-    console.error('Get notes error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 
 // POST /notes - Create new note
-router.post('/', (req: AuthenticatedRequest, res: Response) => {
+router.post('/', (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const { content } = createNoteSchema.parse(req.body);
     
@@ -43,11 +37,7 @@ router.post('/', (req: AuthenticatedRequest, res: Response) => {
       noteId: result.lastInsertRowid
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid input', details: error.errors });
-    }
-    console.error('Create note error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 
