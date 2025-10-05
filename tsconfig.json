@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -16,7 +16,8 @@
     "rootDir": "./",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "noEmitOnError": false
   },
   "include": [
     "src/**/*",
@@ -28,6 +29,7 @@
     "dist"
   ],
   "ts-node": {
-    "esm": true
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }

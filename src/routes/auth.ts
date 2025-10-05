@@ -41,7 +41,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     const { email, password } = loginSchema.parse(req.body);
     
     // Find user
-    const user = get('SELECT id, password_hash FROM users WHERE email = ?', [email]);
+    const user = get('SELECT id, password_hash FROM users WHERE email = ?', [email]) as { id: number; password_hash: string } | undefined;
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

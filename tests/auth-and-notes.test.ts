@@ -130,7 +130,7 @@ describe('Authentication and Notes API', () => {
         .send(invalidData)
         .expect(400);
 
-      expect(response.body).toHaveProperty('error', 'Invalid input');
+      expect(response.body).toHaveProperty('error', 'Validation error');
     });
 
     it('should login with valid credentials', async () => {
@@ -238,7 +238,7 @@ describe('Authentication and Notes API', () => {
         .send({ content: '' })
         .expect(400);
 
-      expect(response.body).toHaveProperty('error', 'Invalid input');
+      expect(response.body).toHaveProperty('error', 'Validation error');
     });
 
     it('should delete a note', async () => {
