@@ -1,5 +1,9 @@
 import express from 'express';
 import 'dotenv/config';
+import path from "node:path";
+import fs from "node:fs";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yaml";
 import { initDb } from '../db/index.ts';
 import authRoutes from './routes/auth.ts';
 import notesRoutes from './routes/notes.ts';
