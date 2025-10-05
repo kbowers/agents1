@@ -1,0 +1,13 @@
+services:
+  notes-api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      JWT_SECRET: "dev-secret-change-me"
+      DB_PATH: "/data/app.db"
+    volumes:
+      - notes_data:/data
+volumes:
+  notes_data: {}
