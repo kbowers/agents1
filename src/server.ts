@@ -1,9 +1,9 @@
 import express from 'express';
 import 'dotenv/config';
-import { initDb } from '../db/index.js';
-import authRoutes from './routes/auth.js';
-import notesRoutes from './routes/notes.js';
-import { errorHandler } from './middleware/errorHandler.js';
+import { initDb } from '../db/index.ts';
+import authRoutes from './routes/auth.ts';
+import notesRoutes from './routes/notes.ts';
+import { errorHandler } from './middleware/errorHandler.ts';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
