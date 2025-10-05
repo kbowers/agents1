@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { initDb } from '../db/index.js';
 import authRoutes from './routes/auth.js';
 import notesRoutes from './routes/notes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,11 +23,8 @@ app.get('/health', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/notes', notesRoutes);
 
-// Error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: err.message });
-});
+// Central error handler
+app.use(errorHandler);
 
 // Start server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {

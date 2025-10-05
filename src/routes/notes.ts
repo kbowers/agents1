@@ -42,7 +42,7 @@ router.post('/', (req: AuthenticatedRequest, res: Response, next: NextFunction) 
 });
 
 // DELETE /notes/:id - Delete note if owned by user
-router.delete('/:id', (req: AuthenticatedRequest, res: Response) => {
+router.delete('/:id', (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const noteId = parseInt(req.params.id);
     
@@ -65,8 +65,7 @@ router.delete('/:id', (req: AuthenticatedRequest, res: Response) => {
     
     res.json({ message: 'Note deleted successfully' });
   } catch (error) {
-    console.error('Delete note error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 
